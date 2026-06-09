@@ -80,7 +80,7 @@ The workflow consists of:
 
 ### Network Architecture
 
-![Architecture](figures/architecture.png)
+![Architecture](figures/architecture.jpg)
 
 ### Training Workflow
 
