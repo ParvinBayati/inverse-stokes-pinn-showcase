@@ -80,7 +80,7 @@ The workflow consists of:
 
 ### Network Architecture
 
-<img src="architecture.jpg" alt="Architecture Diagram" width="50"/>
+<img src="figures/architecture.jpg" width="300" alt="Architecture">
 
 ### Training Algorithm
 
