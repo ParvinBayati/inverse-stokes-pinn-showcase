@@ -82,9 +82,57 @@ The workflow consists of:
 
 <img src="figures/architecture.jpg" width="500" alt="Architecture">
 
-### Training Algorithm
+## Training Workflow
 
-<img src="figures/Algorithm.jpg" width="300" alt="Architecture">
+```mermaid
+flowchart TD
+
+A[Load training data and collocation points]
+B[Initialize 8 neural networks]
+C[Define loss function (physics + data)]
+D[Choose optimizer (Adam / L-BFGS)]
+E[Training loop over epochs]
+F[Forward pass: predict velocity and pressure]
+G[Compute PDE residuals (Stokes equations)]
+H[Compute data loss]
+I[Total loss]
+J[Backpropagation]
+K[Optimizer step]
+L[Learning rate update]
+M[Save model checkpoints]
+
+A --> B --> C --> D --> E
+E --> F --> G --> I
+F --> H --> I
+I --> J --> K --> L --> M --> E
+E --> N[Trained PINN model]
+```
+
+
+### Model Description
+
+The PINN framework consists of eight fully-connected neural networks predicting the exterior and interface velocity and pressure fields:
+
+* Exterior flow:
+
+  * (u_{x,out})
+  * (u_{y,out})
+  * (u_{z,out})
+  * (p_{out})
+
+* Interface flow:
+
+  * (u_{x,s})
+  * (u_{y,s})
+  * (u_{z,s})
+  * (p_s)
+
+Each network contains 9 hidden layers with 128 neurons per layer. During training, the model minimizes a composite loss function
+
+$$\mathcal{L} = \mathcal{L}*{phys} + \lambda*{data}\mathcal{L}_{data}, $$
+
+where the physics loss enforces the governing inverse Stokes equations and the data loss enforces agreement with measured velocity data.
+
 
 ### Loss Function Components
 
