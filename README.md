@@ -82,32 +82,53 @@ The workflow consists of:
 
 <img src="figures/architecture.jpg" width="500" alt="Architecture">
 
-## Training Workflow
+### flowchart TD
+```Mermaid
+A[Require: 8 neural networks for exterior and interface fields]
+B[Require: training data (velocity)]
+C[Require: collocation points]
+D[Require: boundary condition points]
+E[Require: learning rate, batch size, epochs]
+F[Require: loss weight lambda_data]
 
-```mermaid
-flowchart TD
+G[Pre-processing: prepare data and collocation batches]
+H[Create neural networks (9 layers, 128 neurons)]
+I[Initialize optimizer and learning-rate scheduler]
 
-A[Load training data and collocation points]
-B[Initialize 8 neural networks]
-C[Define loss function (physics + data)]
-D[Choose optimizer (Adam / L-BFGS)]
-E[Training loop over epochs]
-F[Forward pass: predict velocity and pressure]
-G[Compute PDE residuals (Stokes equations)]
-H[Compute data loss]
-I[Total loss]
-J[Backpropagation]
-K[Optimizer step]
-L[Learning rate update]
-M[Save model checkpoints]
+J[Start training loop over epochs]
 
-A --> B --> C --> D --> E
-E --> F --> G --> I
-F --> H --> I
-I --> J --> K --> L --> M --> E
-E --> N[Trained PINN model]
+K[Initialize epoch loss = 0]
+L[Loop over PDE batches]
+
+M[Zero gradients]
+N[Forward pass: predict velocity and pressure]
+O[Compute loss = physics loss + lambda_data * data loss]
+P[Backward pass (compute gradients)]
+Q[Optimizer step]
+R[Accumulate batch loss]
+
+S[End batch loop]
+T[Record epoch loss]
+U[Update learning rate]
+V[Save model + diagnostics]
+
+W[Repeat for next epoch]
+
+X[Save final trained model]
+Y[Prediction on test data]
+
+A --> G
+B --> G
+C --> G
+D --> G
+E --> G
+F --> G
+
+G --> H --> I --> J --> K --> L
+J --> K
+K --> L --> M --> N --> O --> P --> Q --> R --> S --> T --> U --> V --> W --> J
+J --> X --> Y
 ```
-
 
 ### Model Description
 
