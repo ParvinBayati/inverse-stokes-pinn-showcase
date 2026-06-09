@@ -80,11 +80,11 @@ The workflow consists of:
 
 ### Network Architecture
 
-<img src="figures/architecture.jpg" width="300" alt="Architecture">
+<img src="figures/architecture.jpg" width="500" alt="Architecture">
 
 ### Training Algorithm
 
-![Workflow](figures/Algorithm.jpg)
+<img src="figures/Algorithm.jpg" width="500" alt="Architecture">
 
 ### Loss Function Components
 
