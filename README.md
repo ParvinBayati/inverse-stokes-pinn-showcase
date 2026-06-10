@@ -82,53 +82,68 @@ The workflow consists of:
 
 <img src="figures/architecture.jpg" width="500" alt="Architecture">
 
-### flowchart TD
-```Mermaid
-A[Require: 8 neural networks for exterior and interface fields]
-B[Require: training data (velocity)]
-C[Require: collocation points]
-D[Require: boundary condition points]
-E[Require: learning rate, batch size, epochs]
-F[Require: loss weight lambda_data]
+## Training Algorithm
 
-G[Pre-processing: prepare data and collocation batches]
-H[Create neural networks (9 layers, 128 neurons)]
-I[Initialize optimizer and learning-rate scheduler]
+1. **Require:**
+   - Eight neural networks, each predicting one output: exterior flow $u_{x,out}^{nn}, u_{y,out}^{nn}, u_{z,out}^{nn}, p_{out}^{nn}$ and surface/interface flow  $u_{x,s}^{nn}, u_{y,s}^{nn}, u_{z,s}^{nn}, p_{s}^{nn}$.
+   - Training data: velocity values at training points.
+   - Collocation points for PDE residual evaluation.
+   - Boundary condition points.
+   - Learning rate, batch size, and number of epochs.
+   - Loss weight $\lambda_{data}$.
 
-J[Start training loop over epochs]
+3. **Preprocessing**: Prepare training data and collocation points.
+4. **Create Neural Networks**: Construct eight neural networks with 9 hidden layers and 128 neuron per layer
+5. **Initialize optimizer and learning-rate scheduler.**
+6. **For** $$epoch = 1, \dots, epoch_{\text{total}}$$
+7. - Initialize losses: $$\text{loss} = 0$$.
+8. - **For** each batch $$(x, y, z)$$ from PDE points
+   - lklfg
+   - sdgdfh
+   - sdghdfh
+9.       - Zero gradients of network parameters $$\bm{W}$$ and $$\bm{b}$$.
+10.      - Predict velocity and pressure fields.
+11.  
+12. 
+13.       -
+14.       - Predict velocity and pressure fields.
+   
+15.      - Compute total loss: $${\cal L} =  {\cal L}_{phys} + \lambda_{data}\,{\cal L}_{data}$$.
+   
+16.       - Compute gradients: \texttt{loss.backward()}.
+         
+17.       - Update $\bm{W}$ and $\bf{b}$ using \texttt{optimizer.step()}.
+         
+18.      - Accumulate batch losses.
+         
+19.  - **EndFor**
+   
+   - Record total loss for this epoch.
+      
+   - Update the learning rate using the scheduler.
+      
+   - Save model weights and loss values for diagnostics.
+      
+ **EndFor**
 
-K[Initialize epoch loss = 0]
-L[Loop over PDE batches]
+   For each training epoch:
 
-M[Zero gradients]
-N[Forward pass: predict velocity and pressure]
-O[Compute loss = physics loss + lambda_data * data loss]
-P[Backward pass (compute gradients)]
-Q[Optimizer step]
-R[Accumulate batch loss]
+      Initialize epoch loss.
 
-S[End batch loop]
-T[Record epoch loss]
-U[Update learning rate]
-V[Save model + diagnostics]
+      For each batch of PDE collocation points:
 
-W[Repeat for next epoch]
-
-X[Save final trained model]
-Y[Prediction on test data]
-
-A --> G
-B --> G
-C --> G
-D --> G
-E --> G
-F --> G
-
-G --> H --> I --> J --> K --> L
-J --> K
-K --> L --> M --> N --> O --> P --> Q --> R --> S --> T --> U --> V --> W --> J
-J --> X --> Y
-```
+          * Zero gradients.
+          * Predict velocity and pressure fields.
+          * Compute physics and data losses.
+          * Compute total loss.
+          * Backpropagate gradients.
+          * Update network parameters.
+          * Accumulate batch losses.
+   3. Record epoch loss.
+   4. Update learning rate.
+   5. Save diagnostics and checkpoints.
+8. Save final trained model.
+9. Predict velocity and pressure fields on test data.
 
 ### Model Description
 
