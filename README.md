@@ -98,31 +98,20 @@ The workflow consists of:
 6. **For** $$epoch = 1, \dots, epoch_{\text{total}}$$
 7. - Initialize losses: $$\text{loss} = 0$$.
 8. - **For** each batch $$(x, y, z)$$ from PDE points
-   - lklfg
-   - sdgdfh
-   - sdghdfh
-9.       - Zero gradients of network parameters $$\bm{W}$$ and $$\bm{b}$$.
-10.      - Predict velocity and pressure fields.
-11.  
-12. 
-13.       -
-14.       - Predict velocity and pressure fields.
-   
-15.      - Compute total loss: $${\cal L} =  {\cal L}_{phys} + \lambda_{data}\,{\cal L}_{data}$$.
-   
-16.       - Compute gradients: \texttt{loss.backward()}.
-         
-17.       - Update $\bm{W}$ and $\bf{b}$ using \texttt{optimizer.step()}.
-         
-18.      - Accumulate batch losses.
+      - Zero gradients of network parameters $$W$$ and $$b$$.
+      - Predict velocity and pressure fields.
+      - Compute total loss: $$L =  L_{phys} + \lambda_{data} L_{data}$$.
+      - Compute gradients: *loss.backward()*.
+      - pdate $W$ and $b$ using *optimizer.step()*.
+      - Accumulate batch losses.
          
 19.  - **EndFor**
    
-   - Record total loss for this epoch.
+20. - Record total loss for this epoch.
       
-   - Update the learning rate using the scheduler.
+21. - Update the learning rate using the scheduler.
       
-   - Save model weights and loss values for diagnostics.
+22. - Save model weights and loss values for diagnostics.
       
  **EndFor**
 
