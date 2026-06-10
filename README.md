@@ -82,7 +82,7 @@ The workflow consists of:
 
 <img src="figures/architecture.jpg" width="500" alt="Architecture">
 
-## Training Algorithm
+### Training Algorithm
 
 1. **Require:**
    - Eight neural networks, each predicting one output: exterior flow $u_{x,out}^{nn}, u_{y,out}^{nn}, u_{z,out}^{nn}, p_{out}^{nn}$ and surface/interface flow  $u_{x,s}^{nn}, u_{y,s}^{nn}, u_{z,s}^{nn}, p_{s}^{nn}$.
@@ -96,16 +96,16 @@ The workflow consists of:
 4. **Create Neural Networks**: Construct eight neural networks with 9 hidden layers and 128 neuron per layer
 5. **Initialize optimizer and learning-rate scheduler.**
 6. **For** $$epoch = 1, \dots, epoch_{\text{total}}$$
-7. - Initialize losses: $$\text{loss} = 0$$.
-8. - **For** each batch $$(x, y, z)$$ from PDE points
-      - Zero gradients of network parameters $$W$$ and $$b$$.
-      - Predict velocity and pressure fields.
-      - Compute total loss: $$L =  L_{phys} + \lambda_{data} L_{data}$$.
-      - Compute gradients: *loss.backward()*.
-      - pdate $W$ and $b$ using *optimizer.step()*.
-      - Accumulate batch losses.
+7.    - Initialize losses: $$\text{loss} = 0$$.
+8.    - **For** each batch $$(x, y, z)$$ from PDE points
+         - Zero gradients of network parameters $$W$$ and $$b$$.
+         - Predict velocity and pressure fields.
+         - Compute total loss: $$L =  L_{phys} + \lambda_{data} L_{data}$$.
+         - Compute gradients: *loss.backward()*.
+         - pdate $W$ and $b$ using *optimizer.step()*.
+         - Accumulate batch losses.
          
-19.  - **EndFor**
+19. - **EndFor**
    
 20. - Record total loss for this epoch.
       
@@ -113,63 +113,13 @@ The workflow consists of:
       
 22. - Save model weights and loss values for diagnostics.
       
- **EndFor**
-
-   For each training epoch:
-
-      Initialize epoch loss.
-
-      For each batch of PDE collocation points:
-
-          * Zero gradients.
-          * Predict velocity and pressure fields.
-          * Compute physics and data losses.
-          * Compute total loss.
-          * Backpropagate gradients.
-          * Update network parameters.
-          * Accumulate batch losses.
-   3. Record epoch loss.
-   4. Update learning rate.
-   5. Save diagnostics and checkpoints.
-8. Save final trained model.
-9. Predict velocity and pressure fields on test data.
-
-### Model Description
-
-The PINN framework consists of eight fully-connected neural networks predicting the exterior and interface velocity and pressure fields:
-
-* Exterior flow:
-
-  * (u_{x,out})
-  * (u_{y,out})
-  * (u_{z,out})
-  * (p_{out})
-
-* Interface flow:
-
-  * (u_{x,s})
-  * (u_{y,s})
-  * (u_{z,s})
-  * (p_s)
-
-Each network contains 9 hidden layers with 128 neurons per layer. During training, the model minimizes a composite loss function
-
-$$\mathcal{L} = \mathcal{L}*{phys} + \lambda*{data}\mathcal{L}_{data}, $$
-
-where the physics loss enforces the governing inverse Stokes equations and the data loss enforces agreement with measured velocity data.
-
-
-### Loss Function Components
-
-![Loss Function](figures/loss_function.png)
+23. **EndFor**
+24. **Save final trained parameters $W$ and $b$**
+25. **Prediction:** Apply the trained model on test data points to predict the velocity.
 
 ### Predicted Velocity Field
 
 ![Velocity Prediction](figures/velocity_prediction.png)
-
-### Predicted Pressure Field
-
-![Pressure Prediction](figures/pressure_prediction.png)
 
 ### Convergence History
 
